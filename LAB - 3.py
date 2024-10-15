@@ -3,11 +3,11 @@ import heapq
 class PuzzleState:
     def __init__(self, board, zero_pos, g=0, parent=None):
         self.board = board
-        self.zero_pos = zero_pos  # (row, col) of the zero tile
-        self.g = g  # cost to reach this state
-        self.h = self.misplaced_tiles()  # heuristic
-        self.f = self.g + self.h  # total cost
-        self.parent = parent  # reference to the parent state for tracing the path
+        self.zero_pos = zero_pos 
+        self.g = g  
+        self.h = self.misplaced_tiles() 
+        self.f = self.g + self.h
+        self.parent = parent
 
     def misplaced_tiles(self):
         goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -16,13 +16,12 @@ class PuzzleState:
     def get_neighbors(self):
         neighbors = []
         row, col = self.zero_pos
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] 
         
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < 3 and 0 <= new_col < 3:
                 new_board = self.board[:]
-                # Swap the zero tile with the neighboring tile
                 new_board[row * 3 + col], new_board[new_row * 3 + new_col] = new_board[new_row * 3 + new_col], new_board[row * 3 + col]
                 neighbors.append(PuzzleState(new_board, (new_row, new_col), self.g + 1, self))
         
@@ -53,7 +52,7 @@ def a_star(initial_board):
     while open_set:
         current_state = heapq.heappop(open_set)
 
-        if current_state.h == 0:  # Goal reached
+        if current_state.h == 0: 
             print("Solution found:")
             current_state.print_path()
             return current_state.g
@@ -67,7 +66,7 @@ def a_star(initial_board):
             if not any(neighbor.board == state.board for state in open_set):
                 heapq.heappush(open_set, neighbor)
 
-    return None  # No solution found
+    return None 
 
 def main():
     print("Enter the initial board configuration as 9 integers (0 for the empty tile):")
